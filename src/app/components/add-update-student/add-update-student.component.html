@@ -1,0 +1,222 @@
+<div class="container mt-4">
+  <div class="d-flex align-items-center my-2 cu">
+    <button mat-button color="primary" (click)="goBack('BACK')">
+      <mat-icon class="back" fontIcon="keyboard_backspace"></mat-icon>
+      <span>Back</span>
+    </button>
+  </div>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="mb-4 text-center">
+        {{ isEditMode ? "Edit" : "Add" }} Student
+      </h2>
+
+      <div [formGroup]="studentForm">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name" required />
+            </mat-form-field>
+            <div
+              *ngIf="
+                control['name'].invalid &&
+                (control['name'].touched || control['name'].dirty)
+              "
+              class="text-danger"
+            >
+              Name is required
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" required />
+            </mat-form-field>
+            <div
+              *ngIf="
+                control['email'].invalid &&
+                (control['email'].touched || control['email'].dirty)
+              "
+              class="text-danger"
+            >
+              Email is required
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Gender</mat-label>
+              <mat-select formControlName="gender" required>
+                <mat-option value="Male">Male</mat-option>
+                <mat-option value="Female">Female</mat-option>
+                <mat-option value="Other">Other</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div
+              *ngIf="
+                control['gender'].invalid &&
+                (control['gender'].touched || control['gender'].dirty)
+              "
+              class="text-danger"
+            >
+              Gender is required
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Phone Number</mat-label>
+              <input
+                matInput
+                formControlName="phone"
+                required
+                type="text"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
+              />
+            </mat-form-field>
+            <div
+              *ngIf="
+                control['phone'].invalid &&
+                (control['phone'].touched || control['phone'].dirty)
+              "
+              class="text-danger"
+            >
+              Phone number is required
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Address</mat-label>
+              <textarea matInput formControlName="address" rows="1"></textarea>
+            </mat-form-field>
+            <div
+              *ngIf="
+                control['address'].invalid &&
+                (control['address'].touched || control['address'].dirty)
+              "
+              class="text-danger"
+            >
+              Address is required
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Languages Known</mat-label>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option
+                  *ngFor="let language of filteredLanguages"
+                  [value]="language"
+                >
+                  {{ language }}
+                </mat-option>
+              </mat-autocomplete>
+              <input
+                matInput
+                formControlName="languages"
+                [matAutocomplete]="auto"
+                (input)="filterLanguages($event)"
+                placeholder="Select languages"
+              />
+            </mat-form-field>
+            <div
+              *ngIf="
+                control['languages'].invalid &&
+                (control['languages'].touched || control['languages'].dirty)
+              "
+              class="text-danger"
+            >
+              Language is required
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="form-group">
+              <mat-label>Year of Study</mat-label>
+              <mat-radio-group formControlName="year" required>
+                <mat-radio-button value="1" class="mx-1"
+                  >1st Year</mat-radio-button
+                >
+                <mat-radio-button value="2" class="mx-1"
+                  >2nd Year</mat-radio-button
+                >
+                <mat-radio-button value="3" class="mx-1"
+                  >3rd Year</mat-radio-button
+                >
+                <mat-radio-button value="4" class="mx-1"
+                  >4th Year</mat-radio-button
+                >
+              </mat-radio-group>
+            </div>
+            <div
+              *ngIf="
+                control['year'].invalid &&
+                (control['year'].touched || control['year'].dirty)
+              "
+              class="text-danger"
+            >
+              Year of Study is required
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <mat-checkbox formControlName="terms" required>
+              I agree to the terms and conditions
+            </mat-checkbox>
+            <div
+              *ngIf="
+                control['terms'].invalid &&
+                (control['terms'].touched || control['terms'].dirty)
+              "
+              class="text-danger"
+            >
+              You must agree to the terms
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-4">
+          <div>
+            <div class="form-group text-center">
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                class="btn btn-primary w-100"
+                (click)="onSubmit()"
+              >
+                {{ isEditMode ? "Update" : "Submit" }}
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="form-group text-center">
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                class="btn btn-primary w-100"
+                (click)="goBack('CANCEL')"
+              >
+                {{ "Cancel" }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
