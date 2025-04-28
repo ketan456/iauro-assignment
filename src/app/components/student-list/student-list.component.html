@@ -6,11 +6,15 @@
     </button>
   </div>
 
-  <table mat-table [dataSource]="students" class="mat-elevation-z8">
+  <table mat-table [dataSource]="studentList" class="mat-elevation-z8">
     <!-- Columns -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let student">{{ student.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="gender">
+      <th mat-header-cell *matHeaderCellDef>Gender</th>
+      <td mat-cell *matCellDef="let student">{{ student.gender }}</td>
     </ng-container>
 
     <ng-container matColumnDef="email">
@@ -37,15 +41,18 @@
 
     <tr
       mat-header-row
-      *matHeaderRowDef="['name', 'email', 'mobile', 'action']"
+      *matHeaderRowDef="['name', 'gender', 'email', 'mobile', 'action']"
     ></tr>
     <tr
       mat-row
-      *matRowDef="let row; columns: ['name', 'email', 'mobile', 'action']"
+      *matRowDef="
+        let row;
+        columns: ['name', 'gender', 'email', 'mobile', 'action']
+      "
     ></tr>
   </table>
 
-  <div *ngIf="students.length === 0" class="text-center mt-4">
+  <div *ngIf="studentList.length === 0" class="text-center mt-4">
     <p>No students found. Please add students.</p>
   </div>
 </div>

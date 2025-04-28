@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./add-update-student.component.css'],
 })
 export class AddUpdateStudentComponent {
-  studentForm!: FormGroup;
+  studentForm: FormGroup = new FormGroup({});
   isEditMode: boolean = false;
   studentId: number | null = null;
   languages: string[] = ['English', 'Marathi', 'Hindi'];
@@ -122,3 +122,4 @@ export class AddUpdateStudentComponent {
     });
   }
 }
+

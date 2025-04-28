@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { StudentService } from 'src/app/service/student.service';
+import { Student } from 'src/app/shared/student';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -9,53 +10,46 @@ import Swal from 'sweetalert2';
   styleUrls: ['./student-list.component.css'],
 })
 export class StudentListComponent {
-  students: any[] = [];
-  student = [
-    {
-      id: 1745839791109,
-      name: 'Ketan Anil Sutar',
-      email: 'ketan@gmail.com',
-      gender: 'Male',
-      phone: '9403846612',
-      address: '19/68 Near Acs College',
-      year: '1',
-      terms: true,
-      languages: 'English',
-    },
-    {
-      name: 'Dhiraj Karadage',
-      email: 'dhiraj@gmail.com',
-      gender: 'Male',
-      phone: '1234567891',
-      address: 'Kolhapur',
-      year: '1',
-      terms: true,
-      languages: 'Marathi',
-      id: 1745839950243,
-    },
-  ];
+  studentList: Student[] = [];
+
   constructor(
     private router: Router,
     private studentService: StudentService // Inject the service
-  ) {
-
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadStudents();
-
-    if (this.students) {
-      localStorage.setItem(
-        this.studentService.localStorage,
-        JSON.stringify(this.student)
-      );
-    }
   }
 
-  // Method to load students from local storage using the service
+  // Method to load students from service
   loadStudents() {
-    this.students = this.studentService.getStudents();
+    this.studentService.students$.subscribe((students) => {
+      this.studentList = students;
+      if (this.studentList.length === 0 && !localStorage.getItem('studentsDeleted')) {
+        this.studentService.saveStudent({
+          id: 1745839791109,
+          name: 'Ketan Anil Sutar',
+          email: 'ketan@gmail.com',
+          gender: 'Male',
+          phone: '9403846612',
+          address: '19/68 Near Acs College',
+          year: '1',
+          terms: true,
+          languages: 'English',
+        });
+        this.studentService.saveStudent({
+          id: 1745839950243,
+          name: 'Dhiraj Karadage',
+          email: 'dhiraj@gmail.com',
+          gender: 'Male',
+          phone: '1234567891',
+          address: 'Kolhapur',
+          year: '1',
+          terms: true,
+          languages: 'Marathi',
+        });
+      }
+    });
   }
 
   // Navigate to edit student page
@@ -74,8 +68,8 @@ export class StudentListComponent {
     }).then((res) => {
       if (res.isConfirmed) {
         this.studentService.deleteStudent(id);
-        this.loadStudents();
       }
     });
   }
 }
+
